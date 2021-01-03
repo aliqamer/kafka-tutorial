@@ -1,0 +1,44 @@
+Kafka cmd
+
+start
+> zookeeper-server-start.bat .\config\zookeeper.properties
+> kafka-server-start.bat .\config\server.properties
+
+1. create
+
+ > kafka-topics.bat --zookeeper 127.0.0.1:2181 --topic first_topic --create --partitions 3 --replication-factor 1
+
+ >kafka-topics.bat --zookeeper 127.0.0.1:2181 --create --topic twitter_tweets --partitions 6 --replication-factor 1
+
+2. list
+ > kafka-topics.bat --zookeeper 127.0.0.1:2181 --list
+
+ 3. describe
+ > kafka-topics.bat --zookeeper 127.0.0.1:2181 --topic first_topic --describe
+
+producer
+ > kafka-console-producer.bat --broker-list 127.0.0.1:9092 --topic first_topic
+
+consumer
+>  kafka-console-consumer.bat --bootstrap-server 127.0.0.1:9092 --topic first_topic 
+>  kafka-console-consumer.bat --bootstrap-server 127.0.0.1:9092 --topic first_topic --from-beginning (to read everything from start)
+
+> kafka-console-consumer.bat --bootstrap-server 127.0.0.1:9092 --topic twitter_tweets
+
+>  kafka-console-consumer.bat --bootstrap-server 127.0.0.1:9092 --topic first_topic --group my-first-application
+
+list consumer group
+>  kafka-console-consumer.bat --bootstrap-server 127.0.0.1:9092 --topic first_topic --group my-first-application
+
+>  kafka-consumer-groups.bat --bootstrap-server localhost:9092 --describe --group my-first-application 
+
+to read from start again - reset offsets
+>  kafka-consumer-groups.bat --bootstrap-server localhost:9092 --group my-first-application --reset-offsets --to-earliest --execute --topic first_topic
+
+Producer with keys
+kafka-console-producer --broker-list 127.0.0.1:9092 --topic first_topic --property parse.key=true --property key.separator=,
+> key,value
+> another key,another value
+
+Consumer with keys
+kafka-console-consumer --bootstrap-server 127.0.0.1:9092 --topic first_topic --from-beginning --property print.key=true --property key.separator=,
